@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Base Netflix Theme Settings */
+@theme {
+  --color-netflix-red: #E50914;
+  --color-netflix-dark: #141414;
+}
+
+body {
+  background-color: #141414; /* Netflix dark background */
+  color: #ffffff; /* White text */
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
