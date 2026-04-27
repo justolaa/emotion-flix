@@ -9,14 +9,22 @@ export default function FaceScanner({ onEmotionDetected }) {
   const [error, setError] = useState(null);
 
   // 1. Load the AI Models from our public folder
-  useEffect(() => {
+    useEffect(() => {
     const loadModels = async () => {
       try {
         const MODEL_URL = '/models';
+        
+        // ⏱️ START THE STOPWATCH
+        console.time("ModelLoadTime"); 
+
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
           faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         ]);
+
+        // 🛑 STOP THE STOPWATCH AND PRINT TO CONSOLE
+        console.timeEnd("ModelLoadTime"); 
+
         setIsModelsLoaded(true);
       } catch (err) {
         setError("Failed to load AI models. Did you put them in the public folder?");
@@ -47,12 +55,17 @@ export default function FaceScanner({ onEmotionDetected }) {
   const handleVideoPlaying = () => {
     // We run the detection every 1 second (1000ms)
     const scanInterval = setInterval(async () => {
+      const startTime = performance.now(); // ⏱️ Note the exact millisecond
       if (!videoRef.current) return;
 
       const detections = await faceapi.detectSingleFace(
         videoRef.current, 
         new faceapi.TinyFaceDetectorOptions()
       ).withFaceExpressions();
+
+      const endTime = performance.now(); // 🛑 Note the exact millisecond it finished
+  
+  console.log(`Frame processed in: ${endTime - startTime} milliseconds`);
 
       if (detections) {
         // Find the strongest emotion
