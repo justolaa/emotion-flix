@@ -1,15 +1,24 @@
 @import "tailwindcss";
 
-/* Base Netflix Theme Settings */
 @theme {
   --color-netflix-red: #E50914;
-  --color-netflix-dark: #141414;
 }
 
+/* THIS IS THE MAGIC LINE TO FIX TAILWIND V4 DARK MODE TOGGLE */
+@custom-variant dark (&:is(.dark *));
+/* LIGHT MODE DEFAULTS (For the Supervisor / Printing) */
+
 body {
-  background-color: #141414; /* Netflix dark background */
-  color: #ffffff; /* White text */
+  background-color: #f9fafb; /* Light gray/white */
+  color: #111827; /* Dark gray text */
   margin: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* DARK MODE OVERRIDES (The Cinematic Vibe) */
+html.dark body {
+  background-color: #141414; /* Netflix black */
+  color: #ffffff;
 }

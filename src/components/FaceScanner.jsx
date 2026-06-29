@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as faceapi from '@vladmandic/face-api';
-import { Camera, Loader2, AlertCircle } from 'lucide-react';
+import { Camera, Loader2, AlertCircle, BookType } from 'lucide-react';
 
 export default function FaceScanner({ onEmotionDetected }) {
   const videoRef = useRef(null);
@@ -39,7 +39,7 @@ export default function FaceScanner({ onEmotionDetected }) {
     setIsScanning(true);
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
-        let video = videoRef.current;
+        let video = videoRef.current; 
         if (video) {
           video.srcObject = stream;
           video.play();
@@ -66,6 +66,7 @@ export default function FaceScanner({ onEmotionDetected }) {
       const endTime = performance.now(); // 🛑 Note the exact millisecond it finished
   
   console.log(`Frame processed in: ${endTime - startTime} milliseconds`);
+
 
       if (detections) {
         // Find the strongest emotion
@@ -97,17 +98,18 @@ export default function FaceScanner({ onEmotionDetected }) {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-black/60 border border-gray-800 rounded-lg max-w-2xl mx-auto">
+    // FIX: Added light mode background (bg-gray-50) and borders
+    <div className="flex flex-col items-center justify-center p-6 bg-gray-50 dark:bg-black/60 border border-gray-200 dark:border-gray-800 rounded-lg max-w-2xl mx-auto transition-colors w-full">
       
       {error && (
-        <div className="flex items-center gap-2 text-netflix-red mb-4 p-3 bg-red-900/20 rounded">
+        <div className="flex items-center gap-2 text-netflix-red mb-4 p-3 bg-red-100 dark:bg-red-900/20 rounded w-full">
           <AlertCircle size={20} />
           <p>{error}</p>
         </div>
       )}
 
       {/* Video Container */}
-      <div className="relative w-full max-w-md aspect-video bg-black rounded overflow-hidden border border-gray-700 flex items-center justify-center shadow-2xl shadow-netflix-red/10">
+      <div className="relative w-full max-w-md aspect-video bg-gray-200 dark:bg-black rounded overflow-hidden border border-gray-300 dark:border-gray-700 flex items-center justify-center shadow-lg transition-colors">
         <video 
           ref={videoRef} 
           onPlay={handleVideoPlaying}
@@ -116,9 +118,9 @@ export default function FaceScanner({ onEmotionDetected }) {
         />
         
         {!isScanning && (
-          <div className="absolute flex flex-col items-center text-gray-500">
+          <div className="absolute flex flex-col items-center text-gray-500 dark:text-gray-500">
             <Camera size={48} className="mb-2 opacity-50" />
-            <p>Camera is currently off</p>
+            <p className="font-medium">Camera is currently off</p>
           </div>
         )}
       </div>
@@ -126,7 +128,7 @@ export default function FaceScanner({ onEmotionDetected }) {
       {/* Controls */}
       <div className="mt-8 text-center">
         {!isModelsLoaded ? (
-          <button disabled className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-gray-400 font-bold rounded cursor-not-allowed">
+          <button disabled className="flex items-center gap-2 px-6 py-3 bg-gray-200 text-gray-500 dark:bg-gray-800 dark:text-gray-400 font-bold rounded cursor-not-allowed transition-colors">
             <Loader2 className="animate-spin" size={20} />
             Loading AI Engine...
           </button>
@@ -143,7 +145,7 @@ export default function FaceScanner({ onEmotionDetected }) {
                <div className="w-2 h-2 bg-netflix-red rounded-full"></div>
                ANALYZING EMOTION...
              </div>
-             <p className="text-sm text-gray-400">Please look straight into the camera</p>
+             <p className="text-sm text-gray-500 dark:text-gray-400">Please look straight into the camera</p>
           </div>
         )}
       </div>
